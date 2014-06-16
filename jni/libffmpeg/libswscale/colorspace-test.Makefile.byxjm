@@ -1,0 +1,20 @@
+OBJS = colorspace-test.o 
+LDLIBS = -L../libavutil
+CC = gcc
+CXX = g++
+#CFLAGS = -O -Wl,-Map 
+CFLAGS = -g -Wall
+
+TARGETS = colorspace-test 
+INCLUDE_PATH=-I../ -I../libavutil 
+
+$(TARGETS):$(OBJS)
+	$(CC) -o $(TARGETS) $(OBJS) libswscale.a  -lavutil $(LDLIBS) $(CFLAGS) 
+colorspace-test.o :colorspace-test.c
+	$(CC) -c colorspace-test.c $(INCLUDE_PATH)
+
+clean:
+	-rm -r $(OBJS) $(TARGETS)
+
+install:
+	cp colorspace-test ../colorspace-test

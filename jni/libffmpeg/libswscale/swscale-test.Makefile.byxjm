@@ -1,0 +1,20 @@
+OBJS = swscale-test.o 
+LDLIBS = -L../libavutil
+CC = gcc
+CXX = g++
+#CFLAGS = -O -Wl,-Map 
+CFLAGS = -g -Wall
+
+TARGETS = swscale-test 
+INCLUDE_PATH=-I../ -I../libavutil 
+
+$(TARGETS):$(OBJS)
+	$(CC) -o $(TARGETS) $(OBJS) libswscale.a -lm -lavutil $(LDLIBS) $(CFLAGS) 
+swscale-test.o :swscale-test.c
+	$(CC) -c swscale-test.c $(INCLUDE_PATH)
+
+clean:
+	-rm -r $(OBJS) $(TARGETS)
+
+install:
+	cp swscale-test ../swscale-test

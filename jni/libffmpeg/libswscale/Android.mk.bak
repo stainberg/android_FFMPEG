@@ -1,0 +1,38 @@
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_MODULE := libswscale
+
+LOCAL_ARM_NEON := false
+SUPPORT_NEON := false
+HAVE_PTHREADS := yes
+
+include $(LOCAL_PATH)/config.mak
+
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+	ifeq ($(SUPPORT_NEON),true)
+        LOCAL_ARM_NEON := true
+        LOCAL_CFLAGS := -DHAVE_NEON=1	  	  
+	else
+	    HAVE_NEON := no
+	endif
+endif
+
+$(info XJM debug: LOCAL_ARM_NEON = $(LOCAL_ARM_NEON))
+$(info XJM debug: HAVE_NEON      = $(LOCAL_ARM_NEON))
+
+LOCAL_CFLAGS += -DHAVE_AV_CONFIG_H -std=c99 -mfloat-abi=softfp 
+  
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+    ifeq ($(SUPPORT_NEON),true)
+		LOCAL_CFLAGS += -mfpu=neon -marm -march=armv7-a -mtune=cortex-a8 
+	endif
+endif
+
+SWSCALE_C_FILES = input.c options.c output.c rgb2rgb.c swscale.c \
+       swscale_unscaled.c utils.c yuv2rgb.c
+
+SWSCALE_SRC_FILES = $(addprefix libswscale/, $(sort $(SWSCALE_C_FILES)))
+
+LOCAL_SRC_FILES := $(SWSCALE_SRC_FILES)
+LOCAL_ARM_MODE := arm
+include $(BUILD_STATIC_LIBRARY)

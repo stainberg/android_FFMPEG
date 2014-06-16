@@ -1,0 +1,12 @@
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_MODULE := libswresample
+
+SWRESAMPLE_C_FILES = swresample.c audioconvert.c resample.c rematrix.c dither.c     
+
+SWRESAMPLE_SRC_FILES = $(addprefix libswresample/, $(sort $(SWRESAMPLE_C_FILES))) 
+
+LOCAL_SRC_FILES := $(SWRESAMPLE_SRC_FILES) \
+                   $(SWRESAMPLE_C_FILES)
+LOCAL_ARM_MODE := arm
+include $(BUILD_STATIC_LIBRARY)
